@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="src/script.js"></script>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <h1>Chores</h1>
+    <body>
+        <div id="app">
+            <button type="button" onclick="getUsers()">Get Users</button>
+            <div id="userList" style="display:none"></div>
+            <div id="userInfo" style="display:none"></div>
+            <div id="chore_buttons" style="display:none">
+                <div class="btn_group">
+                    <!--Split these into button groups according to their relevance/room/area and split them using css on the client-->
+                    <button type="button" onclick="setChore('Washing Up', 1)">Washing Up</button>
+                    <button type="button" onclick="setChore('Putting Away', 1)">Putting Away</button>
+                    <button type="button" onclick="setChore('Cleaning the Surfaces', 1)">Cleaning the Surfaces</button>
+                    <button type="button" onclick="setChore('Cleaning the Hob', 1)">Cleaning the Hob</button>
+                    <button type="button" onclick="setChore('Setting off Laundry', 1)">Setting off Laundry</button>
+                    <button type="button" onclick="setChore('Hanging up Laundry', 1)">Hanging up Laundry</button>
+                    <button type="button" onclick="setChore('Taking down Laundry', 1)">Taking down Laundry</button>
+                    <!--Could have this take a dynamic number of points-->
+                    <button type="button" onclick="setChore('Vacuuming', 1)">Vacuuming</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
