@@ -7,6 +7,10 @@ Hopefully someday I'll understand how to make things look nice...
 
 TODO:
 client:
+ * Users > hover over > shows users
+ * Select user > box text set to username : score
+ * shows buttons
+ * sections for buttons and data vis?
  * displays:
   * allow user to enter their own chores
   * show list of users chores (&points per chore?)

@@ -13,10 +13,10 @@ function revealMessage () {
     document.getElementById("hiddenElement").style.display = 'block';
 }
 
-async function getUsers () {
+window.onload = async function getUsers () {
     try {
-        fetch('http://192.168.1.79:4000/graphql', {
-//        fetch('http://localhost:4000/graphql', {
+//        fetch('http://192.168.1.79:4000/graphql', {
+        fetch('http://localhost:4000/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -39,15 +39,21 @@ async function getUsers () {
             this.users = users;
 
             // Could make this a button group rather than a list
-            let str = '<ul>'
+            // let str = '<ul>'
         
-            users.forEach(function(user) {
-                str += '<li><button onclick="setUser(\'' + user.id + '\')">' + user.name + '</button></li>';
-            }); 
+            // users.forEach(function(user) {
+            //     str += '<li><button onclick="setUser(\'' + user.id + '\')">' + user.name + '</button></li>';
+            // }); 
             
-            str += '</ul>';
-            document.getElementById("userList").innerHTML = str;
-            document.getElementById("userList").style.display = 'block';
+            // str += '</ul>';
+            let str = ''
+            users.forEach(function(user) {
+                str += '<button class="list-button" onclick="setUser(\'' + user.id + '\')">' + user.name + '</button><br>';
+            });
+
+            // document.getElementById("userList").innerHTML = str;
+            // document.getElementById("userList").style.display = 'block';
+            document.getElementById("dropdown-content").innerHTML = str;
         })
     } catch (e) {
         console.log('err', e)
@@ -57,8 +63,8 @@ async function getUsers () {
 async function setUser (userId) {
     this.selectedUser = this.users.find(x => x.id == userId);
     try {
-        fetch('http://192.168.1.79:4000/graphql', {
-//        fetch('http://localhost:4000/graphql', {
+//        fetch('http://192.168.1.79:4000/graphql', {
+        fetch('http://localhost:4000/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -82,8 +88,8 @@ async function setUser (userId) {
             this.selectedUser.points = points;
 
             let str = this.selectedUser.name + ' : ' + this.selectedUser.points;
-            document.getElementById("userInfo").innerHTML = str;
-            document.getElementById("userInfo").style.display = 'block';
+            document.getElementById("dropbtn").innerHTML = str;
+            // document.getElementById("userInfo").style.display = 'block';
             document.getElementById("chore_buttons").style.display = 'block';
         })
     } catch (e) {
@@ -93,8 +99,8 @@ async function setUser (userId) {
 
 async function setChore (choreName, chorePoints) {
     try {
-        fetch('http://192.168.1.79:4000/graphql', {
-//        fetch('http://localhost:4000/graphql', {
+//        fetch('http://192.168.1.79:4000/graphql', {
+        fetch('http://localhost:4000/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

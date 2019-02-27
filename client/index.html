@@ -4,12 +4,18 @@
         <script src="src/script.js"></script>
         <link rel="stylesheet" href="styles.css">
     </head>
-    <h1>Chores</h1>
     <body>
         <div id="app">
-            <button type="button" onclick="getUsers()">Get Users</button>
-            <div id="userList" style="display:none"></div>
-            <div id="userInfo" style="display:none"></div>
+            <h1>Chores</h1>
+            <!-- <button type="button" onclick="getUsers()">Get Users</button> -->
+            <!-- <div id="userList" style="display:none"></div> -->
+            <!--<div id="userInfo" style="display:none"></div> -->
+            <div class="dropdown">
+                <button id="dropbtn" class="dropbtn">Users</button>
+                <div id="dropdown-content" class="dropdown-content">
+                    No Users Found
+                </div>
+            </div>
             <div id="chore_buttons" style="display:none">
                 <div class="btn_group">
                     <!--Split these into button groups according to their relevance/room/area and split them using css on the client-->
@@ -25,5 +31,8 @@
                 </div>
             </div>
         </div>
+        <!-- <script>
+            getUsers()
+        </script> -->
     </body>
 </html>
