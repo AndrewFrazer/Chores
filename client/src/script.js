@@ -1,3 +1,5 @@
+// import * as d3 from "d3";
+
 this.users = []
 this.selectedUser = {}
 
@@ -38,25 +40,15 @@ window.onload = async function getUsers () {
         .then(function(users) {
             this.users = users;
 
-            // Could make this a button group rather than a list
-            // let str = '<ul>'
-        
-            // users.forEach(function(user) {
-            //     str += '<li><button onclick="setUser(\'' + user.id + '\')">' + user.name + '</button></li>';
-            // }); 
-            
-            // str += '</ul>';
             let str = ''
             users.forEach(function(user) {
                 str += '<button class="list-button" onclick="setUser(\'' + user.id + '\')">' + user.name + '</button><br>';
             });
 
-            // document.getElementById("userList").innerHTML = str;
-            // document.getElementById("userList").style.display = 'block';
             document.getElementById("dropdown-content").innerHTML = str;
         })
     } catch (e) {
-        console.log('err', e)
+        console.log('err', e);
     }
 }
 
@@ -89,11 +81,11 @@ async function setUser (userId) {
 
             let str = this.selectedUser.name + ' : ' + this.selectedUser.points;
             document.getElementById("dropbtn").innerHTML = str;
-            // document.getElementById("userInfo").style.display = 'block';
             document.getElementById("chore_buttons").style.display = 'block';
+            // document.getElementById("calendar").style.display = 'block';
         })
     } catch (e) {
-        console.log('err', e)
+        console.log('err', e);
     }
 }
 
@@ -128,11 +120,11 @@ async function setChore (choreName, chorePoints) {
             this.selectedUser.points += points;
 
             let str = this.selectedUser.name + ' : ' + this.selectedUser.points;
-            document.getElementById("userInfo").innerHTML = str;
-            document.getElementById("userInfo").style.display = 'block';
+            document.getElementById("dropbtn").innerHTML = str;
+            document.getElementById("dropbtn").style.display = 'block';
         })
     } catch (e) {
-        console.log('err', e)
+        console.log('err', e);
     }
 }
 
