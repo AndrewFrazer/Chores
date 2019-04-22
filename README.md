@@ -18,4 +18,15 @@ client:
    * when certain chores are done
 
 server:
+ * add datestring type to graphql
  * connect db
+ * add mutation to add json file containing list of chores
+
+calendar:
+ * Each day is a square
+  * colour is # points normalised into batches of 4
+   * If bottom = light grey
+   * If top = dark blue
+   * If not in month = white
+  * hover over for number of points
+ * Shows months present in data

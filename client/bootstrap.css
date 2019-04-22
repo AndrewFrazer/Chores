@@ -10796,19 +10796,6 @@ a.text-dark:hover, a.text-dark:focus {
     margin: 2% 5% 2% 2.5%;
   }
 
-  /* .btn-group {
-    margin: 2% 10%;
-  }
-
-  .section-header {
-    margin: 2% 10%;
-  }
-
-  .my-4 {
-    margin: 2% 10%;
-  } */
-
-  .rect-blue {
-    fill: blue;
-    /* margin: 2% 10%; */
+  .rect-base {
+    fill: grey;
   }
