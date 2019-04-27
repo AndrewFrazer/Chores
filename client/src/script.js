@@ -1,19 +1,5 @@
-// import * as d3 from "d3";
-
 this.users = []
 this.selectedUser = {}
-
-// class User {
-//     constructor ({id, name}) {
-//         this.id = id;
-//         this.name = name;
-//     }
-// }
-
-function revealMessage () {
-    document.getElementById("hiddenElement").innerHTML = this.users[0].name + ':' + this.users[0].id;
-    document.getElementById("hiddenElement").style.display = 'block';
-}
 
 window.onload = async function getUsers () {
     try {
@@ -22,20 +8,21 @@ window.onload = async function getUsers () {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                query: `{
-                    getUsers {
-                        id,
-                        name
-                    }
-                }`
+                query: `
+                    {
+                        users {
+                            id,
+                            name
+                        }
+                    }`
             })
         })
         .then(function(response) {
             return response.json();
         })
         .then(function(myJson) {
-            console.log(JSON.stringify(myJson.data.getUsers));
-            return myJson.data.getUsers;
+            console.log(JSON.stringify(myJson.data.users));
+            return myJson.data.users;
         })
         .then(function(users) {
             this.users = users;
@@ -61,8 +48,10 @@ async function setUser (userId) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 query: `
-                    query GetPoints($userId: ID!) {
-                        getPoints (id: $userId)
+                    query ($userId: ID!) {
+                        user (id: $userId) {
+                            points
+                        }
                     }`,
                 variables: {
                     userId: userId
@@ -73,8 +62,8 @@ async function setUser (userId) {
             return response.json();
         })
         .then(function(myJson) {
-            console.log(JSON.stringify(myJson.data.getPoints));
-            return myJson.data.getPoints;
+            console.log(JSON.stringify(myJson.data.user.points));
+            return myJson.data.user.points;
         })
         .then(function(points) {
             this.selectedUser.points = points;
@@ -97,14 +86,15 @@ async function setChore (choreName, chorePoints) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 query: `
-                    mutation SetChore($userId: ID!, $input: ChoreInput) {
-                        setChore (id: $userId, input: $input)
+                    mutation ($userId: ID!, $input: ChoreInput) {
+                        setChore (userId: $userId, input: $input)
                     }`,
                 variables: {
                     userId: this.selectedUser.id,
                     input: {
                         chore: choreName,
-                        points: chorePoints
+                        points: chorePoints,
+                        time: Date.now(),
                     }
                 }
             })
@@ -127,11 +117,3 @@ async function setChore (choreName, chorePoints) {
         console.log('err', e);
     }
 }
-
-// async function getChores () {
-//     try {
-
-//     } catch (e) {
-//         console.log('err', e)
-//     }
-// }
