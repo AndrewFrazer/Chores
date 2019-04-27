@@ -3,8 +3,6 @@
 This a repo containing a client and server to keep track of chores done.
 This was created for me to try out GraphQL and front end development.
 
-Hopefully someday I'll understand how to make things look nice...
-
 TODO:
 client:
  * sections for buttons and data vis?
@@ -18,9 +16,7 @@ client:
    * when certain chores are done
 
 server:
- * add datestring type to graphql
  * connect db
- * add mutation to add json file containing list of chores
 
 calendar:
  * Each day is a square
