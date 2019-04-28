@@ -5,17 +5,20 @@ This was created for me to try out GraphQL and front end development.
 
 TODO:
 client:
+ * make contributions more responsive
+ * how to handle timezones?
  * sections for buttons and data vis?
  * displays:
   * allow user to enter their own chores
   * show list of users chores (&points per chore?)
  * data vis:
-  * contributions a la github
   * graphs of contributions over time
    * points per day
    * when certain chores are done
 
 server:
+ * might be more efficient to convert to time to date when sent to the 
+   server rather than converting each to a date 
  * connect db
 
 calendar:

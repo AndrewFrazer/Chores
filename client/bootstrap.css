@@ -10797,5 +10797,17 @@ a.text-dark:hover, a.text-dark:focus {
   }
 
   .rect-base {
-    fill: grey;
+    fill: #939BA3;
+  }
+  .rect-top {
+    fill: #273646;
+  }
+  .rect-tmiddle {
+    fill: #424F5D;
+  }
+  .rect-bmiddle {
+    fill: #5D6874;
+  }
+  .rect-bottom {
+    fill: #78818B;
   }
