@@ -5,8 +5,11 @@ This was created for me to try out GraphQL and front end development.
 
 TODO:
 client:
- * make contributions more responsive
- * how to handle timezones?
+ * Should be much more responsive!
+ * calendar:
+  * Shows months and years present in data
+  * Especially needs to be responsive
+  * react to hover better
  * sections for buttons and data vis?
  * displays:
   * allow user to enter their own chores
@@ -21,11 +24,3 @@ server:
    server rather than converting each to a date 
  * connect db
 
-calendar:
- * Each day is a square
-  * colour is # points normalised into batches of 4
-   * If bottom = light grey
-   * If top = dark blue
-   * If not in month = white
-  * hover over for number of points
- * Shows months present in data

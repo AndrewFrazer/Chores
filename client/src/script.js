@@ -1,7 +1,8 @@
 // import * as d3 from window.d3;
 
-this.users = []
-this.selectedUser = {}
+this.users = [];
+this.selectedUser = {};
+this.maxPoints = 0;
 
 window.onload = async function getUsers() {
     try {
@@ -110,8 +111,8 @@ async function getChores(userId) {
             .then(function (chores) {
                 document.getElementById("calendar").style.display = 'block';
 
-                let latest = Math.max.apply(null, chores.map(x => x.time));
-                let earliest = Math.min.apply(null, chores.map(x => x.time));
+                let latestTime = Math.max.apply(null, chores.map(x => x.time));
+                let earliestTime = Math.min.apply(null, chores.map(x => x.time));
                 // dict or array of objects? arrays do have lots of nice functions
                 let datesDict = {};
                 chores.forEach(chore => {
@@ -123,7 +124,7 @@ async function getChores(userId) {
                     }
                 });
 
-                createCalendar(datesDict, earliest, latest);
+                createCalendar(datesDict, earliestTime, latestTime);
             })
     } catch (e) {
         console.log('err', e);
@@ -133,22 +134,22 @@ async function getChores(userId) {
 /**
  * 
  * @param {Object} datesDict 
- * @param {Number} earliest 
- * @param {Number} latest
+ * @param {Number} earliestTime 
+ * @param {Number} latestTime
  */
-function createCalendar(datesDict, earliest, latest) {
+function createCalendar(datesDict, earliestTime, latestTime) {
     let calendar = d3.select('#calendar')
         .append('svg')
         .attr('viewBox', '0 0 960 500')
         .attr("preserveAspectRatio", "xMinYMin meet");
 
-    let most = Math.max.apply(null, Object.values(datesDict));
+    this.maxPoints = Math.max.apply(null, Object.values(datesDict));
 
-    let latestDate = new Date(latest);
-    let earliestDate = new Date(earliest);
-    console.log(latest + ' : ' + latestDate.toDateString());
-    console.log(earliest + ' : ' + earliestDate.toDateString());
-    let initDate = new Date(latestDate.getUTCFullYear(), latestDate.getUTCMonth(), 1);
+    let latestDate = new Date(latestTime);
+    let earliestDate = new Date(earliestTime);
+    console.log(latestTime + ' : ' + latestDate.toDateString());
+    console.log(earliestTime + ' : ' + earliestDate.toDateString());
+    let initDate = new Date(latestDate.getUTCFullYear(), latestDate.getUTCMonth(), 1, 12);
     console.log('init: ' + initDate.getUTCDay());
     let monthYear = [];
     for (let d = latestDate; d > earliestDate; d.setMonth(d.getMonth() - 1)) {
@@ -180,16 +181,17 @@ function createCalendar(datesDict, earliest, latest) {
 
     let initDay = initDate.getUTCDay();
     monthYear.forEach(({ month, year }) => {
-        // days are 0 indexed
+        // Monday currently at bottom 
         let days = Array.from(Array(daysInMonth(month, year)).keys());
         days.forEach(day => {
             ypos = yinit + dayPosition[initDay];
             let current = new Date(Date.UTC(year, month, day + 1));
             let currentString = current.toISOString().split('T')[0];
-            let cssClass = 'rect-base';
+            let cssClass = 'rect';
+            let datePoints = 0
             if (currentString in datesDict) {
-                let p = datesDict[currentString];
-                cssClass = setCSSClass(most, p);
+                datePoints = datesDict[currentString];
+                cssClass = setCSSClass(this.maxPoints, datePoints);
             }
             calendar.append('rect')
                 .attr('x', xpos)
@@ -197,7 +199,10 @@ function createCalendar(datesDict, earliest, latest) {
                 .attr('width', size)
                 .attr('height', size)
                 .attr('id', current.toDateString())
-                .attr('class', cssClass);
+                .attr('data-points', datePoints)
+                .attr('class', cssClass)
+                .append("rect:title")
+                    .text(current.toDateString() + ' : ' + datePoints);
             if (initDay == 0)
                 xpos += smallstep;
             initDay += 1;
@@ -219,7 +224,6 @@ function createCalendar(datesDict, earliest, latest) {
 /**
  * Finds the number of days in a given month/year
  * Useful for finding leap months
- * Method is 1 indexed rather than 0 indexed
  * @param {Number} month 
  * @param {Number} year 
  */
@@ -229,17 +233,18 @@ function daysInMonth(month, year) {
 }
 
 /**
- * 
- * @param {Number} most 
- * @param {Number} p 
+ * Compares the max number of points in the database against the
+ * current date's points to set the cssClass and so colour of the entry
+ * @param {Number} m The max points a date has in the database
+ * @param {Number} p The number of points the current date has
  */
-function setCSSClass(most, p) {
-    let inc = Math.floor(most / 4);
+function setCSSClass(m, p) {
+    let inc = Math.floor(m / 4);
     if (p < Math.floor(inc)) {
         return 'rect-bottom';
     } else if (p < 2 * inc) {
         return 'rect-bmiddle';
-    } else if (p < most - inc) {
+    } else if (p < m - inc) {
         return 'rect-tmiddle';
     } else {
         return 'rect-top';
@@ -247,6 +252,7 @@ function setCSSClass(most, p) {
 }
 
 async function setChore(choreName, chorePoints) {
+    let now = Date.now();
     try {
         //        fetch('http://192.168.1.79:4000/graphql', {
         fetch('http://localhost:4000/graphql', {
@@ -262,7 +268,7 @@ async function setChore(choreName, chorePoints) {
                     input: {
                         chore: choreName,
                         points: chorePoints,
-                        time: Date.now(),
+                        time: now,
                     }
                 }
             })
@@ -277,6 +283,20 @@ async function setChore(choreName, chorePoints) {
             .then(function (points) {
                 this.selectedUser.points += points;
 
+                // let nowDate = new Date(now).toISOString().split('T')[0];
+                // let nowElement = document.getElementById("nowDate");
+                // let nowPoints = 0;
+                // if (nowElement === null) {
+                //     nowPoints = nowElement.getAttribute("data-points");
+                // }
+                // nowPoints += points;
+                // if (nowPoints > this.maxPoints) {
+                //     this.maxPoints = nowPoints;
+                //     // redraw calendar
+                // } else {
+                //     // recolour square/add month to front
+                // }
+                
                 let str = this.selectedUser.name + ' : ' + this.selectedUser.points;
                 document.getElementById("dropbtn").innerHTML = str;
                 document.getElementById("dropbtn").style.display = 'block';
