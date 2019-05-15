@@ -4,6 +4,7 @@ const graphqlHTTP = require('express-graphql');
 const { makeExecutableSchema } = require('graphql-tools');
 const cors = require('cors');
 const uuidv4 = require('uuid/v4');
+const fs = require('fs');
 
 // Setup type defs, using GraphQL schema language
 const typeDefs = `
@@ -46,7 +47,7 @@ class User {
 }
 
 class Chore {
-  constructor(id, {chore, points, time}) {
+  constructor(id, { chore, points, time }) {
     this.userId = id;
     this.chore = chore;
     this.points = points;
@@ -86,11 +87,11 @@ const getUsers = () => {
   return userArray;
 }
 
-const getChores = (id) => {
-  console.log('getChores: ' + id);
+const getChores = (userId) => {
+  console.log('getChores: ' + userId);
   let chores = [];
-  if (id) {
-    chores = choreDb.filter(x => x.userId == id);
+  if (userId) {
+    chores = choreDb.filter(x => x.userId == userId);
   } else {
     chores = choreDb;
   }
@@ -104,18 +105,27 @@ const setChore = (userId, input) => {
   return input.points;
 }
 
+const setChores = (userId, input) => {
+  console.log('setChores: ' + userId)
+  input.forEach(chore => {
+    choreDb.push(new Chore(userId, chore));
+  });
+  console.log('Chores set: ' + input.length)
+}
+
 // Setup the resolver
 const resolvers = {
   Query: {
-    user: async (root, {id}) => await getUser(id),
-    users: async (root, {id}) => await getUsers(),
-    chores: async (root, {id}) => await getChores(id),
+    user: async (root, { id }) => await getUser(id),
+    users: async (root, { id }) => await getUsers(),
+    chores: async (root, { userId }) => await getChores(userId),
   },
   Mutation: {
-    setChore: async (root, {userId, input}) => await setChore(userId, input),
+    setChore: async (root, { userId, input }) => await setChore(userId, input),
+    //setChores: async (root, {userId, input}) => await setChores(userId, input),
   },
   User: {
-    points: async ({id}) => await getUserPoints(id),
+    points: async ({ id }) => await getUserPoints(id),
   },
 }
 
@@ -137,4 +147,11 @@ app.listen(4000);
 console.log('Running a GraphQL API server at localhost:4000/graphql');
 for (const userId in userDb) {
   console.log(userDb[userId] + ':' + userId);
+}
+if (fs.existsSync('server/chores.json')) {
+  console.log('reading chores.json')
+  let rawdata = fs.readFileSync('server/chores.json');
+  let chores = JSON.parse(rawdata);
+  andyId = Object.keys(userDb)[0];
+  setChores(andyId, chores);
 }
