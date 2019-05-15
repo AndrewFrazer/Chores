@@ -1,8 +1,10 @@
-// import * as d3 from window.d3;
-
 this.users = [];
 this.selectedUser = {};
 this.maxPoints = 0;
+this.datesDict = {};
+this.earliestTime = 0;
+this.latestTime = 0;
+
 
 window.onload = async function getUsers() {
     try {
@@ -112,20 +114,24 @@ async function getChores(userId) {
                 document.getElementById("calendar").style.display = 'block';
                 document.getElementById("calendar").innerHTML = '';
 
-                let latestTime = Math.max.apply(null, chores.map(x => x.time));
-                let earliestTime = Math.min.apply(null, chores.map(x => x.time));
+                if (chores.length == 0) {
+                    return;
+                }
+
+                this.latestTime = Math.max.apply(null, chores.map(x => x.time));
+                this.earliestTime = Math.min.apply(null, chores.map(x => x.time));
                 // dict or array of objects? arrays do have lots of nice functions
-                let datesDict = {};
+                this.datesDict = {};
                 chores.forEach(chore => {
                     let dateString = new Date(chore.time).toISOString().split('T')[0];
-                    if (dateString in datesDict) {
-                        datesDict[dateString] += chore.points;
+                    if (dateString in this.datesDict) {
+                        this.datesDict[dateString] += chore.points;
                     } else {
-                        datesDict[dateString] = chore.points;
+                        this.datesDict[dateString] = chore.points;
                     }
                 });
 
-                createCalendar(datesDict, earliestTime, latestTime);
+                createCalendar(this.datesDict, this.earliestTime, this.latestTime);
             })
     } catch (e) {
         console.log('err', e);
@@ -139,6 +145,7 @@ async function getChores(userId) {
  * @param {Number} latestTime
  */
 function createCalendar(datesDict, earliestTime, latestTime) {
+    document.getElementById("calendar").innerHTML = '';
     let calendar = d3.select('#calendar')
         .append('svg')
         .attr('viewBox', '0 0 960 500')
@@ -301,19 +308,14 @@ async function setChore(choreName, chorePoints) {
             .then(function (points) {
                 this.selectedUser.points += points;
 
-                // let nowDate = new Date(now).toISOString().split('T')[0];
-                // let nowElement = document.getElementById("nowDate");
-                // let nowPoints = 0;
-                // if (nowElement === null) {
-                //     nowPoints = nowElement.getAttribute("data-points");
-                // }
-                // nowPoints += points;
-                // if (nowPoints > this.maxPoints) {
-                //     this.maxPoints = nowPoints;
-                //     // redraw calendar
-                // } else {
-                //     // recolour square/add month to front
-                // }
+                let dateString = new Date(now).toISOString().split('T')[0];
+                if (dateString in this.datesDict) {
+                    this.datesDict[dateString] += points;
+                } else {
+                    this.datesDict[dateString] = points;
+                    this.latestTime = now;
+                }
+                createCalendar(this.datesDict, this.earliestTime, this.latestTime);
                 
                 let str = this.selectedUser.name + ' : ' + this.selectedUser.points;
                 document.getElementById("dropbtn").innerHTML = str;

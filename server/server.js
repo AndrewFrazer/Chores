@@ -87,11 +87,11 @@ const getUsers = () => {
   return userArray;
 }
 
-const getChores = (id) => {
-  console.log('getChores: ' + id);
+const getChores = (userId) => {
+  console.log('getChores: ' + userId);
   let chores = [];
-  if (id) {
-    chores = choreDb.filter(x => x.userId == id);
+  if (userId) {
+    chores = choreDb.filter(x => x.userId == userId);
   } else {
     chores = choreDb;
   }
@@ -118,7 +118,7 @@ const resolvers = {
   Query: {
     user: async (root, { id }) => await getUser(id),
     users: async (root, { id }) => await getUsers(),
-    chores: async (root, { id }) => await getChores(id),
+    chores: async (root, { userId }) => await getChores(userId),
   },
   Mutation: {
     setChore: async (root, { userId, input }) => await setChore(userId, input),
@@ -152,7 +152,6 @@ if (fs.existsSync('server/chores.json')) {
   console.log('reading chores.json')
   let rawdata = fs.readFileSync('server/chores.json');
   let chores = JSON.parse(rawdata);
-  for (const id in userDb) {
-    setChores(id, chores);
-  }
+  andyId = Object.keys(userDb)[0];
+  setChores(andyId, chores);
 }

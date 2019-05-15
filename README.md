@@ -6,7 +6,6 @@ This was created for me to try out GraphQL and front end development.
 TODO:
 client:
  * calendar:
-  * should respond to set chore
   * show years present in data
  * sections for buttons and data vis?
  * displays:
