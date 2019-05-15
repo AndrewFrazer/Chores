@@ -5,11 +5,9 @@ This was created for me to try out GraphQL and front end development.
 
 TODO:
 client:
- * Should be much more responsive!
  * calendar:
-  * Shows months and years present in data
-  * Especially needs to be responsive
-  * react to hover better
+  * should respond to set chore
+  * show years present in data
  * sections for buttons and data vis?
  * displays:
   * allow user to enter their own chores
@@ -22,5 +20,5 @@ client:
 server:
  * might be more efficient to convert to time to date when sent to the 
    server rather than converting each to a date 
+  * solves certain problems as is though.
  * connect db
-

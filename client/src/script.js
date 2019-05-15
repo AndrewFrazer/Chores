@@ -110,6 +110,7 @@ async function getChores(userId) {
             })
             .then(function (chores) {
                 document.getElementById("calendar").style.display = 'block';
+                document.getElementById("calendar").innerHTML = '';
 
                 let latestTime = Math.max.apply(null, chores.map(x => x.time));
                 let earliestTime = Math.min.apply(null, chores.map(x => x.time));
@@ -178,10 +179,27 @@ function createCalendar(datesDict, earliestTime, latestTime) {
         6: 135, // Sat
         0: 152, // Sun
     };
+    let monthName = {
+        0: 'January',
+        1: 'February',
+        2: 'March',
+        3: 'April',
+        4: 'May',
+        5: 'June',
+        6: 'July',
+        7: 'August',
+        8: 'September',
+        9: 'October',
+        10: 'November',
+        11: 'December',
+    };
 
     let initDay = initDate.getUTCDay();
     monthYear.forEach(({ month, year }) => {
-        // Monday currently at bottom 
+        calendar.append('text')
+            .attr('x', xpos)
+            .attr('y', yinit + 30)
+            .text(monthName[month])
         let days = Array.from(Array(daysInMonth(month, year)).keys());
         days.forEach(day => {
             ypos = yinit + dayPosition[initDay];
