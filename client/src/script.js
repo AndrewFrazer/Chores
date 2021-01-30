@@ -9,15 +9,16 @@ this.latestTime = 0;
 window.onload = async function getUsers() {
     try {
         //        fetch('http://192.168.1.79:4000/graphql', {
-        fetch('http://localhost:4000/graphql', {
+        fetch('http://localhost:5000/graphql', {
             method: 'POST',
+            mode: 'cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 query: `
-                    {
+                    query getUsers{
                         users {
-                            id,
-                            name
+                        id,
+                        name
                         }
                     }`
             })
@@ -48,14 +49,18 @@ async function setUser(userId) {
     this.selectedUser = this.users.find(x => x.id == userId);
     try {
         //        fetch('http://192.168.1.79:4000/graphql', {
-        fetch('http://localhost:4000/graphql', {
+        fetch('http://localhost:5000/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 query: `
                     query ($userId: ID!) {
                         user (id: $userId) {
-                            points
+                            points,
+                            chores {
+                                enteredTime,
+                                points
+                            }
                         }
                     }`,
                 variables: {
@@ -68,51 +73,20 @@ async function setUser(userId) {
             })
             .then(function (myJson) {
                 console.log(JSON.stringify(myJson.data.user.points));
-                return myJson.data.user.points;
+                console.log(JSON.stringify(myJson.data.user.chores));
+                return myJson.data.user;
             })
-            .then(function (points) {
-                this.selectedUser.points = points;
+            .then(function (user) {
+                this.selectedUser.points = user.points;
 
                 let str = this.selectedUser.name + ' : ' + this.selectedUser.points;
                 document.getElementById("dropbtn").innerHTML = str;
                 document.getElementById("chore_buttons").style.display = 'block';
 
-                getChores(userId);
-            })
-    } catch (e) {
-        console.log('err', e);
-    }
-}
-
-async function getChores(userId) {
-    try {
-        //        fetch('http://192.168.1.79:4000/graphql', {
-        fetch('http://localhost:4000/graphql', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                query: `
-                            query ($userId: ID!) {
-                                chores (userId: $userId) {
-                                    points,
-                                    time
-                                }
-                            }`,
-                variables: {
-                    userId: userId
-                }
-            })
-        })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (myJson) {
-                //console.log(JSON.stringify(myJson.data.chores.length));
-                return myJson.data.chores;
-            })
-            .then(function (chores) {
                 document.getElementById("calendar").style.display = 'block';
                 document.getElementById("calendar").innerHTML = '';
+
+                let chores = user.chores;
 
                 if (chores.length == 0) {
                     return;
@@ -276,24 +250,25 @@ function setCSSClass(m, p) {
     }
 }
 
-async function setChore(choreName, chorePoints) {
+async function setChore(choreDescription, chorePoints) {
     let now = Date.now();
     try {
         //        fetch('http://192.168.1.79:4000/graphql', {
-        fetch('http://localhost:4000/graphql', {
+        fetch('http://localhost:5000/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 query: `
-                    mutation ($userId: ID!, $input: ChoreInput) {
-                        setChore (userId: $userId, input: $input)
+                    mutation setChore($userId: ID!, $chore: ChoreInput!) {
+                        setChore(userId: $userId, chore: $chore) {
+                            points
+                          }
                     }`,
                 variables: {
                     userId: this.selectedUser.id,
-                    input: {
-                        chore: choreName,
+                    chore: {
+                        choreDescription: choreDescription,
                         points: chorePoints,
-                        time: now,
                     }
                 }
             })
@@ -303,7 +278,7 @@ async function setChore(choreName, chorePoints) {
             })
             .then(function (myJson) {
                 console.log(JSON.stringify(myJson.data.setChore));
-                return myJson.data.setChore;
+                return myJson.data.setChore.points;
             })
             .then(function (points) {
                 this.selectedUser.points += points;
