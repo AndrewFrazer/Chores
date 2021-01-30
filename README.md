@@ -1,8 +1,5 @@
 # Chores
 
-This a repo containing a client and server to keep track of chores done.
-This was created for me to try out GraphQL and front end development.
-
 TODO:
 client:
  * calendar:
@@ -17,7 +14,7 @@ client:
    * when certain chores are done
 
 server:
- * might be more efficient to convert to time to date when sent to the 
+ * might be better to convert to time to date when sent to the 
    server rather than converting each to a date 
   * solves certain problems as is though.
  * connect db
