@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoresServer", "ChoresServer\ChoresServer.csproj", "{4812103E-C854-4DE4-95A9-B8679F1EC17A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoresLib", "ChoresLib\ChoresLib.csproj", "{EC0D50E9-BFB6-4B08-8414-D3C8613FA38A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4812103E-C854-4DE4-95A9-B8679F1EC17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4812103E-C854-4DE4-95A9-B8679F1EC17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4812103E-C854-4DE4-95A9-B8679F1EC17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4812103E-C854-4DE4-95A9-B8679F1EC17A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC0D50E9-BFB6-4B08-8414-D3C8613FA38A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC0D50E9-BFB6-4B08-8414-D3C8613FA38A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC0D50E9-BFB6-4B08-8414-D3C8613FA38A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC0D50E9-BFB6-4B08-8414-D3C8613FA38A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A26B1E3C-6BFA-489A-B8A5-976514E71F9A}
+	EndGlobalSection
+EndGlobal
